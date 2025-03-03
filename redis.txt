@@ -1,0 +1,40 @@
+MSET human:josef 150 human:jan 142 human:ondrej 181 human:hynek 176 human:vaclav 201
+EXISTS human:hynek
+GET human:jan
+GETSET human:hynek 300
+DEL human:josef
+EXPIRE human:vaclav 60
+TTL human:vaclav
+
+- pridani vpravo
+RPUSH list:todolist "Koupit celer" "Naucit se na test"
+RPUSH list:todolist "Dodelat projekt"
+- pridani vlevo
+LPUSH list:todolist "řeřicha"
+- vypis vsech v listu
+LRANGE list:todolist 0 -1
+- pocet vsech v listu
+LLEN list:todolist
+- presun z jednoho do druheho listu
+LMOVE list:todolist list:finished LEFT RIGHT
+LRANGE list:finished 0 -1
+
+- pridani do setu
+ZADD set:games 888 Alfréd 999 Čéňa
+ZADD set:games 111 Pepa 222 Marek 333 Tomáš 444 Michal
+ZADD set:games 555 Jakub 666 Lucifer 777 Zikmund 889 Karel 2 Vaclav 1 Jan
+- 3 nejlepsi skore
+ZREVRANGE set:games 0 2 withscores
+- nejhorsi skore
+ZRANGE set:games 0 0 withscores
+- hraci s mene nez 100 body
+ZRANGEBYSCORE set:games 0 100
+- hraci s vice nez 850 body
+ZREVRANGEBYSCORE set:games inf 850 withscores
+- alfredova pozice
+ZREVRANK set:games Alfréd
+- zyvs alfreda o 12 a jeho nova pozice
+ZINCRBY set:games 12 Alfréd
+ZREVRANK set:games Alfréd
+
+
