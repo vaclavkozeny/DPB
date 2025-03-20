@@ -1,0 +1,48 @@
+1. vložení nové restaurace s alespoň 3 poli
+db.restaurants.insertOne({
+...     name:'nova restaurace',
+...     address: {
+...     building: '123',
+...     street: 'Prazska',
+...     zipcode: '46001'
+...   },
+...   cuisine:'asian'})
+2. vypsání nově vložené restaurace
+db.restaurants.findOne({name: 'nova restaurace'})
+3. aktualizace nové restaurace – změňte alespoň název
+db.restaurants.updateOne({name: 'nova restaurace'},{$set:{name:'super restaurace'}},{upsert:true})
+4. přidání vašeho hodnocení restaurace
+db.restaurants.updateOne({name:'super restaurace'},{$set:{grades:{Date:Date(), grade:'A', score:30}}})
+5. smazání nové restaurace
+db.restaurants.deleteOne({name:'super restaurace'})
+
+-------------------------------------
+1. vypsání všech restaurací
+db.restaurants.find()
+2. vypsání všech restaurací – pouze názvy, abecedně seřazené
+db.restaurants.find({},{name:1}).sort({name:1})
+3. vypsání pouze 10 záznamů z předchozího dotazu
+db.restaurants.find({},{name:1}).sort({name:1}).limit(10)
+4. zobrazení dalších 10 záznamů
+db.restaurants.find({},{name:1}).sort({name:1}).limit(10).skip(10)
+5. vypsání restaurací ve čtvrti Bronx (čtvrť = borough)
+db.restaurants.find({borough:'Bronx'})
+6. vypsání názvů restaurací, jejichž název začíná na písmeno M
+db.restaurants.find({name:/^M})
+7. vypsání restaurací, které vaří italskou kuchyni a sídlí na Manhattanu
+db.restaurants.find({$and:[{cuisine:'Italian'},{borough:'Manhattan'}]})
+8. vypsání restaurací, které mají alespoň 1 skóre vyšší než 80
+db.restaurants.find({"grades.score":{$gt: 80}})
+
+--- bonus ---
+1. vypsání restaurací, které mají alespoň jedno skóre mezi 80 a 90
+db.restaurants.find({ "grades": { $elemMatch: { "score": { $gt: 80, $lt: 90 } } } })
+2. přidání nového pole „popular: 1“ k restauracím, které mají alespoň 1 skóre vyšší než 80
+db.restaurants.updateMany({"grades.scores":{$gt:80}},{$set:{popular:1}})
+3. přidání nového pole „trash: 1“ k restauracím, které mají alespoň 1 skóre nižší než 1
+db.restaurants.updateMany({"grades.score":{$lt:1}},{$set:{trash:1}})
+4. vypsání kontroverzních restaurací, tedy těch, co mají popular i trash 1
+db.restaurants.find({$and:[{popular:1},{trash:1}]})
+5. přidání nového pole „top_score: 1“ ke všem hodnocením, které jsou vyšší než 90
+db.restaurants.updateMany({"grades.score":{$gt:90}},{$set:{"grades.$.top_score":1}})
+	

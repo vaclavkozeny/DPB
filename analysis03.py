@@ -51,6 +51,7 @@ def analyze_czech(pismena, slova):
     for pismeno, pocet in reversed(filtrovana_pismena.items()):
         print(f'{pismeno}: {pocet}, {(pocet / suma) * 100}%')
     #graf
+    filtrovana_pismena = dict(sorted(filtrovana_pismena.items(),key = lambda x: x[1], reverse=True))
     normalizovane_hodnoty = [hodnota / suma for hodnota in filtrovana_pismena.values()] #prevod na procenta
     plt.bar(filtrovana_pismena.keys(),normalizovane_hodnoty)
     plt.savefig('graf.png')
@@ -73,10 +74,11 @@ def search(slovo):
 
 start = time.time()
 pismena, slova = use_cache()
-search("policie")
+analyze_czech(pismena, slova)
 print(r.zrevrange(pismenaKey,0,4,withscores=1))
 print(r.zrange(pismenaKey,0,4,withscores=1))
 print(r.zrevrange(slovaKey,0,9,withscores=1))
+search("ještěd")
 end = time.time()
 cas = end - start
 print(cas)
