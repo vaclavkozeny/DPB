@@ -126,4 +126,12 @@ Poté vytvořte index na 'borough', zopakujte dotaz a porovnejte hodnoty 'totalD
 
 S řešením pomůže https://pymongo.readthedocs.io/en/stable/api/pymongo/collection.html#pymongo.collection.Collection.create_index
 '''
-print_delimiter(11)
+print_delimiter(16)
+cursor = collection.find({'borough':'Bronx'})
+totalDocsExamined = cursor.explain()['executionStats']
+print(totalDocsExamined['totalDocsExamined'])
+collection.create_index('borough')
+cursor = collection.find({'borough':'Bronx'})
+totalDocsExamined = cursor.explain()['executionStats']
+print(totalDocsExamined['totalDocsExamined'])
+collection.drop_index("borough_1")

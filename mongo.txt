@@ -28,7 +28,7 @@ db.restaurants.find({},{name:1}).sort({name:1}).limit(10).skip(10)
 5. vypsání restaurací ve čtvrti Bronx (čtvrť = borough)
 db.restaurants.find({borough:'Bronx'})
 6. vypsání názvů restaurací, jejichž název začíná na písmeno M
-db.restaurants.find({name:/^M})
+db.restaurants.find({name:/^M/})
 7. vypsání restaurací, které vaří italskou kuchyni a sídlí na Manhattanu
 db.restaurants.find({$and:[{cuisine:'Italian'},{borough:'Manhattan'}]})
 8. vypsání restaurací, které mají alespoň 1 skóre vyšší než 80
@@ -45,4 +45,4 @@ db.restaurants.updateMany({"grades.score":{$lt:1}},{$set:{trash:1}})
 db.restaurants.find({$and:[{popular:1},{trash:1}]})
 5. přidání nového pole „top_score: 1“ ke všem hodnocením, které jsou vyšší než 90
 db.restaurants.updateMany({"grades.score":{$gt:90}},{$set:{"grades.$.top_score":1}})
-	
+
